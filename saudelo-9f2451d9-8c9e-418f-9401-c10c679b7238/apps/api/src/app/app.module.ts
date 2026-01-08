@@ -4,7 +4,12 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
 @Module({
-  imports: [],
+  imports: [TypeOrmModule.forRoot({
+    type: 'sqlite',
+    database: 'dev.db',
+    entities: [__dirname + '/**/*.entity{.ts,.js}'],
+    synchronize: true,
+  })],
   controllers: [AppController],
   providers: [AppService],
 })
