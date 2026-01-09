@@ -1,96 +1,350 @@
-# Saudelo9f2451d98c9e418f9401C10c679b7238
+# Secure Task Management System - Setup Guide
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+This guide will help you set up and run the project on your local machine.
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is ready ✨.
+## Prerequisites
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/getting-started/intro#learn-nx?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+Before you begin, ensure you have the following installed:
 
-## Run tasks
+- **Node.js** (v18.19+ or v20.11+ or v24+)
+  - Download from [nodejs.org](https://nodejs.org/)
+  - Verify installation: `node --version`
+- **npm** (comes with Node.js)
+  - Verify installation: `npm --version`
+- **Git**
+  - Download from [git-scm.com](https://git-scm.com/)
+  - Verify installation: `git --version`
 
-To run tasks with Nx use:
+## Installation Steps
 
-```sh
-npx nx <target> <project-name>
+### 1. Clone the Repository
+
+```bash
+git clone <repository-url>
+cd <project-folder-name>
 ```
 
-For example:
+### 2. Install Dependencies
 
-```sh
-npx nx build myproject
+From the project root directory, run:
+
+```bash
+npm install
 ```
 
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+This will install all required dependencies for both the frontend (Angular dashboard) and backend (NestJS API).
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
 
-## Add new projects
+## Running the Application
 
-While you could add new projects to your workspace manually, you might want to leverage [Nx plugins](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) and their [code generation](https://nx.dev/features/generate-code?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) feature.
+### Development Mode
 
-To install a new plugin you can use the `nx add` command. Here's an example of adding the React plugin:
-```sh
-npx nx add @nx/react
+The project uses Nx monorepo, which allows you to run multiple applications simultaneously.
+
+#### Run the Full Application (Frontend + Backend)
+
+```bash
+npx nx serve dashboard
 ```
 
-Use the plugin's generator to create new projects. For example, to create a new React app or library:
+This command will:
+- Start the NestJS API backend (usually on `http://localhost:3000`)
+- Start the Angular dashboard frontend (usually on `http://localhost:4200`)
+- Automatically proxy API requests from frontend to backend
 
-```sh
-# Generate an app
-npx nx g @nx/react:app demo
+#### Run Backend Only
 
-# Generate a library
-npx nx g @nx/react:lib some-lib
+```bash
+npx nx serve api
 ```
 
-You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
+The API will be available at `http://localhost:3000/api`
 
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+#### Run Frontend Only
 
-## Set up CI!
-
-### Step 1
-
-To connect to Nx Cloud, run the following command:
-
-```sh
-npx nx connect
+```bash
+npx nx serve dashboard
 ```
 
-Connecting to Nx Cloud ensures a [fast and scalable CI](https://nx.dev/ci/intro/why-nx-cloud?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) pipeline. It includes features such as:
+The dashboard will be available at `http://localhost:3000/dashboard`
 
-- [Remote caching](https://nx.dev/ci/features/remote-cache?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task distribution across multiple machines](https://nx.dev/ci/features/distribute-task-execution?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Automated e2e test splitting](https://nx.dev/ci/features/split-e2e-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task flakiness detection and rerunning](https://nx.dev/ci/features/flaky-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+### Production Build
 
-### Step 2
+To build the application for production:
 
-Use the following command to configure a CI workflow for your workspace:
+```bash
+# Build both applications
+npx nx run-many --target=build --all
 
-```sh
-npx nx g ci-workflow
+# Or build individually
+npx nx build api
+npx nx build dashboard
 ```
 
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+Built files will be in the `dist/` directory.
 
-## Install Nx Console
+## Technology Stack
 
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
+### Backend (NestJS API)
+- **Framework**: NestJS
+- **Database**: SQLite with TypeORM
+- **Authentication**: JWT (JSON Web Tokens) with Passport
+- **Password Security**: bcrypt for password hashing
+- **API Prefix**: All endpoints prefixed with `/api`
 
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+### Frontend (Angular Dashboard)
+- **Framework**: Angular
+- **Build Tool**: esbuild
+- **Styling**: Tailwind CSS
+- **Routing**: Angular Router
 
-## Useful links
+### Monorepo
+- **Tool**: Nx
+- **Package Manager**: npm
 
-Learn more:
+## Project Structure
 
-- [Learn more about this workspace setup](https://nx.dev/getting-started/intro#learn-nx?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+```
+├── apps/
+│   ├── api/              # NestJS backend application
+│   │   └── src/
+│   │       ├── app/
+│   │       │   ├── auth/           # Authentication module (JWT)
+│   │       │   ├── task/           # Task management module
+│   │       │   ├── entities/       # TypeORM entities
+│   │       │   │   └── user.entity.ts
+│   │       │   ├── app.module.ts
+│   │       │   └── app.controller.ts
+│   │       └── main.ts
+│   └── dashboard/        # Angular frontend application
+│       └── src/
+├── node_modules/         # Dependencies (generated)
+├── dist/                 # Built files (generated)
+├── dev.db               # SQLite database (generated)
+├── package.json          # Project dependencies
+└── nx.json              # Nx workspace configuration
+```
 
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+## Available Commands
+
+```bash
+# Start development servers
+npx nx serve dashboard    # Run frontend + backend
+npx nx serve api         # Run backend only
+
+# Build for production
+npx nx build api         # Build backend
+npx nx build dashboard   # Build frontend
+
+# Run tests
+npx nx test api          # Test backend
+npx nx test dashboard    # Test frontend
+
+# Lint code
+npx nx lint api          # Lint backend
+npx nx lint dashboard    # Lint frontend
+
+# Clear Nx cache (if you encounter issues)
+npx nx reset
+```
+
+## Troubleshooting
+
+### Port Already in Use
+
+If you get an error that port 3000 or 4200 is already in use:
+
+```bash
+# On macOS/Linux, find and kill the process
+lsof -ti:3000 | xargs kill -9
+lsof -ti:4200 | xargs kill -9
+
+# On Windows
+netstat -ano | findstr :3000
+taskkill /PID <PID> /F
+```
+
+### Node Version Issues
+
+If you encounter Node.js version errors, ensure you're using the correct version:
+
+```bash
+node --version  # Should be 18.19+, 20.11+, or 24+
+```
+
+Consider using a Node version manager like [nvm](https://github.com/nvm-sh/nvm):
+
+```bash
+nvm install 20
+nvm use 20
+```
+
+### Clear Cache and Reinstall
+
+If you encounter unexpected errors:
+
+```bash
+# Remove node_modules and caches
+rm -rf node_modules
+rm -rf .nx/cache
+rm -rf dist
+
+# Reinstall dependencies
+npm install
+```
+
+### Database Issues
+
+If the SQLite database has issues, you can delete and regenerate it:
+
+```bash
+rm dev.db
+# Restart the API, and it will create a new database with the schema
+npx nx serve api
+```
+
+The database schema is automatically created based on your TypeORM entities when `synchronize: true` is set.
+
+### Testing Authentication
+
+**Quick test flow:**
+
+1. Register a user:
+```bash
+curl -X POST http://localhost:3000/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"username":"demo","password":"demo123","orgId":"demo-org"}'
+```
+
+2. Login and save the token:
+```bash
+curl -X POST http://localhost:3000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"username":"demo","password":"demo123"}'
+```
+
+3. Use the token to access protected routes:
+```bash
+curl -X GET http://localhost:3000/api/tasks \
+  -H "Authorization: Bearer <paste-your-token-here>"
+```
+
+### Common Authentication Errors
+
+- **401 Unauthorized on /api/tasks**: Your JWT token is missing, invalid, or expired
+- **500 Error on register/login**: Check that the User entity is properly imported in `app.module.ts`
+- **"User already exists"**: The username is already taken, try a different username
+
+## API Endpoints
+
+### Authentication (Public - No JWT Required)
+
+**Register a new user:**
+```bash
+curl -X POST http://localhost:3000/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"username":"testuser","password":"password123","orgId":"org-001"}'
+```
+
+**Response:**
+```json
+{
+  "user": {
+    "id": 1,
+    "username": "testuser",
+    "orgId": "org-001"
+  }
+}
+```
+
+**Login:**
+```bash
+curl -X POST http://localhost:3000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"username":"testuser","password":"password123"}'
+```
+
+**Response:**
+```json
+{
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "id": 1,
+    "username": "testuser",
+    "orgId": "org-001"
+  }
+}
+```
+
+### Tasks (Protected - JWT Required)
+
+All task endpoints require the `Authorization: Bearer <token>` header.
+
+**Create a task:**
+```bash
+curl -X POST http://localhost:3000/api/tasks \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+  -d '{"title":"Complete project","description":"Finish the task management system"}'
+```
+
+**Get all tasks:**
+```bash
+curl -X GET http://localhost:3000/api/tasks \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
+```
+
+**Update a task:**
+```bash
+curl -X PUT http://localhost:3000/api/tasks/1 \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+  -d '{"completed":true}'
+```
+
+**Delete a task:**
+```bash
+curl -X DELETE http://localhost:3000/api/tasks/1 \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
+```
+
+## Authentication & Security
+
+This application uses JWT (JSON Web Tokens) for authentication:
+
+- **Password Hashing**: All passwords are hashed using bcrypt with 10 salt rounds
+- **JWT Secret**: Currently set to `dev-secret` (change this in production!)
+- **Token Expiration**: JWT tokens expire after 24 hours
+- **Protected Routes**: All `/api/tasks/*` endpoints require a valid JWT token
+- **User Isolation**: Users can only access their own tasks
+
+### Security Notes for Production
+
+Before deploying to production:
+
+1. **Change the JWT secret** in `apps/api/src/app/auth/auth.module.ts` and `apps/api/src/app/auth/jwt.strategy.ts`
+2. Set `synchronize: false` in TypeORM configuration (in `app.module.ts`)
+3. Use environment variables for sensitive data
+4. Enable HTTPS
+5. Add rate limiting to prevent brute force attacks
+6. Consider implementing refresh tokens
+
+## Additional Resources
+
+- [Nx Documentation](https://nx.dev)
+- [NestJS Documentation](https://docs.nestjs.com)
+- [Angular Documentation](https://angular.io/docs)
+
+## Support
+
+If you encounter any issues not covered in this guide, please:
+1. Check the project's issue tracker
+2. Contact the project maintainer
+3. Review the error logs in the terminal
+
+## Development Tips
+
+- Keep your Node.js version up to date
+- Run `npm install` after pulling new changes
+- Clear the Nx cache if you experience build issues: `npx nx reset`
+- Use `npx nx graph` to visualize project dependencies
